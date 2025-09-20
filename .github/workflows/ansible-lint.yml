@@ -6,12 +6,35 @@ on:
       - '*'
   pull_request:
 jobs:
-  run:
+  generate-versions:
     runs-on: ubuntu-20.04
+    outputs:
+      ansible-versions: ${{ steps.versions.outputs.versions }}
     steps:
       - uses: actions/checkout@v4
+      - name: Generate Ansible versions
+        run: |
+          python3 utils/ansible_vesion.py
+      - name: Read versions from file
+        id: versions
+        run: |
+          echo "versions=$(cat .ansible_versions.json)" >> $GITHUB_OUTPUT
 
-      - name: Run ansible-lint
-        uses: ansible/ansible-lint@main
+  lint:
+    needs: generate-versions
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        ansible-version: ${{ fromJson(needs.generate-versions.outputs.ansible-versions) }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
         with:
-          requirements_file: molecule/requirements.yml
+          python-version: '3.x'
+      - name: Install Ansible ${{ matrix.ansible-version }}
+        run: pip install "ansible==${{ matrix.ansible-version }}"
+      - name: Install ansible-lint
+        run: pip install ansible-lint
+      - name: Run ansible-lint
+        run: ansible-lint -r molecule/requirements.yml
