@@ -1,12 +1,7 @@
 ---
 # .ansible-lint
-skip_list:
-  - '106'  # Role name {} does not match ``^[a-z][a-z0-9_]+$`` pattern`
 
 exclude_paths:
   - meta/main.yml # https://github.com/ansible/ansible-lint/issues/4387
-  - molecule
-  - molecule/_tests/
+  - molecule/
   - examples/
-  - tests/
-  - utils/
