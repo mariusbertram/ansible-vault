@@ -38,7 +38,7 @@
         cmd: "subscription-manager list --consumed --matches={{ vault_rhsm_subscription_name | quote }} --pool-only"
       register: _subscription_manager_consumed
       changed_when: false
-      when: (vault_rhsm_subscription_name)
+      when: vault_rhsm_subscription_name is truthy
 
     - name: Find Hashicorp/Vault RHSM repo subscription pool id
       ansible.builtin.command:
@@ -46,7 +46,7 @@
       register: _subscription_manager_available
       changed_when: false
       when:
-        - (vault_rhsm_subscription_name)
+        - vault_rhsm_subscription_name is truthy
         - _subscription_manager_consumed.stdout | length <= 0
 
     - name: Attach Hashicorp/Vault RHSM subscription
@@ -56,7 +56,7 @@
       changed_when: _subscription_manager_attach.stdout is search('Successfully attached a subscription')
       failed_when: _subscription_manager_attach.stdout is search('could not be found')
       when:
-        - (vault_rhsm_subscription_name)
+        - vault_rhsm_subscription_name is truthy
         - _subscription_manager_consumed.stdout | default() | length <= 0
         - _subscription_manager_available.stdout | default() | length > 0
 
