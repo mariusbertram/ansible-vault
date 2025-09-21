@@ -1,9 +1,10 @@
 name: Semantic Releaser
 
 on:
+
   push:
     branches:
-      - master
+      - main
 
 permissions:
   contents: write
