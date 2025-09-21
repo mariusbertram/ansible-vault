@@ -1,6 +1,6 @@
 ---
 - name: Include asserts
-  include_tasks: asserts.yml
+  ansible.builtin.include_tasks: asserts.yml
 
 - name: Add Vault group
   become: true
