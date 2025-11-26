@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.1](https://github.com/mariusbertram/ansible-vault/compare/v1.0.0...v1.0.1) (2025-11-26)
+
+### Bug Fixes
+
+* added step for cache update before installing any package ([2e5151f](https://github.com/mariusbertram/ansible-vault/commit/2e5151f905b884629634847821a5b69da5bc4861))
+
 ## 1.0.0 (2025-11-26)
 
 ### Features
